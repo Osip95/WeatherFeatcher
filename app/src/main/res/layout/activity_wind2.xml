@@ -4,43 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".WindActivity">
+
+    <Button
+        android:textAllCaps="false"
+        android:id="@+id/btnGetSpeedWind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GetSpeedWind"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWind"
+        app:layout_constraintVertical_bias="0.337" />
+
+    <Button
+        android:textAllCaps="false"
+        android:id="@+id/btnGoWeatherScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GoWeatherScreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGetSpeedWind" />
 
     <TextView
-        android:id="@+id/tvHello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="temperature"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:textAllCaps="false"
-        android:id="@+id/bt_get_temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GetTemperature"
+        android:id="@+id/tvWind"
+        android:layout_width="58dp"
+        android:layout_height="19dp"
+        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHello"
-        app:layout_constraintVertical_bias="0.301" />
-
-    <Button
-        android:textAllCaps="false"
-        android:id="@+id/bt_go_screen_wind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="GoScreenWind"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_get_temp"
-        app:layout_constraintVertical_bias="0.081" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
 </androidx.constraintlayout.widget.ConstraintLayout>

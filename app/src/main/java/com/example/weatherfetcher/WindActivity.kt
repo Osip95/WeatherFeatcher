@@ -9,42 +9,38 @@ import com.example.weatherfetcher.feature.weather_screen.WeatherInteractor
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherApiClient
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemouteSource
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
+import com.example.weatherfetcher.feature.weather_screen.data.WindRepoImpl
 import com.example.weatherfetcher.feature.weather_screen.ui.WeatherScreenPresenter
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
-
+class WindActivity : AppCompatActivity() {
     private lateinit var presenter: WeatherScreenPresenter
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        setContentView(R.layout.activity_wind2)
         presenter = WeatherScreenPresenter(
             WeatherInteractor(
-                WeatherRepoImpl(
+                WindRepoImpl(
                     WeatherRemouteSource(WeatherApiClient.getApi())
                 )
             )
         )
-
-        var weather = ""
-        val tvHello = findViewById<TextView>(R.id.tvHello)
-        val btnGetTemp = findViewById<Button>(R.id.bt_get_temp)
-        val btnGoWindScreen = findViewById<Button>(R.id.bt_go_screen_wind)
-        btnGetTemp.setOnClickListener {
+        val tvWindSpeed = findViewById<TextView>(R.id.tvWind)
+        val btnGetSpeedWind = findViewById<Button>(R.id.btnGetSpeedWind)
+        val btnGoWeatherScreen = findViewById<Button>(R.id.btnGoWeatherScreen)
+        btnGetSpeedWind.setOnClickListener {
             GlobalScope.launch {
                 withContext(Dispatchers.Main) {
-                    tvHello.text = presenter.getWeather()
+                    tvWindSpeed.text = presenter.getWeather()
                 }
             }
         }
 
-        btnGoWindScreen.setOnClickListener{
-          startActivity(Intent(this,WindActivity::class.java))
+        btnGoWeatherScreen.setOnClickListener{
+            startActivity(Intent(this,MainActivity::class.java))
         }
-
-
     }
 }

@@ -1,10 +1,13 @@
 package com.example.weatherfetcher.feature.weather_screen
 
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepo
+import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
 
 class WeatherInteractor(private val weatherRepo: WeatherRepo) {
 
-    fun getWeather(): String {
-        return weatherRepo.getTemperature()
+    suspend fun getWeather(): String {
+        return if (weatherRepo is WeatherRepoImpl)
+            weatherRepo.getTemperature()
+        else weatherRepo.getSpeedWind()
     }
 }
