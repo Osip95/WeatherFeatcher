@@ -4,41 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WindActivity">
+    tools:context=".feature.weather_screen.ui.WindActivity">
 
     <Button
-        android:textAllCaps="false"
         android:id="@+id/btnGetSpeedWind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GetSpeedWind"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWind"
-        app:layout_constraintVertical_bias="0.337" />
+        app:layout_constraintTop_toBottomOf="@+id/tvWindSpeed"
+        app:layout_constraintVertical_bias="0.194" />
 
     <Button
-        android:textAllCaps="false"
         android:id="@+id/btnGoWeatherScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GoWeatherScreen"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetSpeedWind" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGetSpeedWind"
+        app:layout_constraintVertical_bias="0.261" />
 
     <TextView
-        android:id="@+id/tvWind"
-        android:layout_width="58dp"
-        android:layout_height="19dp"
-        android:text="TextView"
+        android:id="@+id/tvWindSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="speedWind"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.523" />
+        app:layout_constraintVertical_bias="0.474" />
+
+    <RadioGroup
+        android:id="@+id/rgCitiesWind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/tvWindSpeed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/rbMoscow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/moscow" />
+
+        <RadioButton
+            android:id="@+id/rbSaintPetersburg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/saint_petersburg" />
+
+        <RadioButton
+            android:id="@+id/rbOmsk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/omsk" />
+    </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
