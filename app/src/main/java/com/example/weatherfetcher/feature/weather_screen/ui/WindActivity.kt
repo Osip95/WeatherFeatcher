@@ -4,56 +4,57 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import com.example.weatherfetcher.CITY
 import com.example.weatherfetcher.R
 import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherApiClient
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemouteSource
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
-import com.example.weatherfetcher.feature.weather_screen.presentation.WeatherScreenPresenter
-import kotlinx.coroutines.*
+import com.example.weatherfetcher.feature.weather_screen.domain.WeatherModel
+import com.example.weatherfetcher.feature.weather_screen.presentation.WindScreenPresenter
+import kotlinx.coroutines.CoroutineExceptionHandler
 
-class WindActivity : AppCompatActivity() {
 
-    private lateinit var presenter: WeatherScreenPresenter
+class WindActivity : AppCompatActivity(), WindScreenView {
+
+    private lateinit var tvWindSpeed: TextView
+    private lateinit var btnGoWeatherScreen: Button
+    private lateinit var windPresenter: WindScreenPresenter
+    private lateinit var city: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wind2)
+        setContentView(R.layout.activity_wind)
+        val interactor = GetWeatherInteractor(
+            WeatherRepoImpl(
+                WeatherRemouteSource(
+                    WeatherApiClient.getApi())))
 
-        val rgCity = findViewById<RadioGroup>(R.id.rgCitiesWind)
-        val tvWindSpeed = findViewById<TextView>(R.id.tvWindSpeed)
-        val btnGetSpeed = findViewById<Button>(R.id.btnGetSpeedWind)
-        val btnGoWeatherScreen = findViewById<Button>(R.id.btnGoWeatherScreen)
-        val errorHandler = CoroutineExceptionHandler { _, _ ->
-            Toast.makeText(this@WindActivity, "Произошла ошибка", Toast.LENGTH_LONG).show()
-        }
-        rgCity.setOnCheckedChangeListener { _, checkedId ->
-            findViewById<RadioButton>(checkedId)?.apply {
-                CITY = text.toString()
-            }
-        }
-        btnGetSpeed.setOnClickListener {
-            if (CITY == "") {
-                Toast.makeText(this@WindActivity, "Выберите город", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            presenter = WeatherScreenPresenter(
-                GetWeatherInteractor(
-                    WeatherRepoImpl(
-                        WeatherRemouteSource(WeatherApiClient.getApi())
-                    )
-                )
-            )
-            CoroutineScope(Dispatchers.Main).launch(errorHandler) {
-                tvWindSpeed.text = presenter.getWeather().wind.speed
-            }
-
-        }
+        tvWindSpeed = findViewById(R.id.tvWindSpeed)
+        btnGoWeatherScreen = findViewById(R.id.btnGoWeatherScreen)
+        windPresenter = WindScreenPresenter(interactor)
+        windPresenter.attachView(this)
+        city = intent.getStringExtra("city").toString()
+        windPresenter.onCreatedActivity(city)
 
         btnGoWeatherScreen.setOnClickListener {
-            CITY = ""
             startActivity(Intent(this, MainActivity::class.java))
         }
+    }
+
+    override fun showError() {
+        Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showSpeed(speed: String) {
+        tvWindSpeed.text = speed
+    }
+
+    override fun showErrorCityNotSelected() {
+        Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDestroy() {
+        windPresenter.detachView()
+        super.onDestroy()
     }
 }
