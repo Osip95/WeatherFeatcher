@@ -4,4 +4,5 @@ interface WindScreenView {
     fun showError()
     fun showSpeed(speed: String)
     fun showErrorCityNotSelected()
+    fun navigateToWeatherScreen()
 }

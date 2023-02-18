@@ -10,14 +10,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class WindScreenPresenter(private val interactor: GetWeatherInteractor) {
+class WindScreenPresenter(private val interactor: GetWeatherInteractor, private val city: String) {
 
-    var windActivity: WindScreenView? = null
-    val errorHandler = CoroutineExceptionHandler { _, _ ->
+    private var windActivity: WindScreenView? = null
+    private val errorHandler = CoroutineExceptionHandler { _, _ ->
         windActivity?.showError()
     }
 
-    fun onCreatedActivity(city: String) {
+    private fun getWindSpeed() {
         if (city == "") {
             windActivity?.showErrorCityNotSelected()
             return
@@ -28,8 +28,13 @@ class WindScreenPresenter(private val interactor: GetWeatherInteractor) {
         }
     }
 
+    fun onGoWeatherScreenClicked() {
+        windActivity?.navigateToWeatherScreen()
+    }
+
     fun attachView(view: WindActivity) {
         this.windActivity = view
+        getWindSpeed()
     }
 
     fun detachView() {

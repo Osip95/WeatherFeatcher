@@ -2,7 +2,6 @@ package com.example.weatherfetcher.feature.weather_screen.presentation
 
 
 import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
-import com.example.weatherfetcher.feature.weather_screen.ui.MainActivity
 import com.example.weatherfetcher.feature.weather_screen.ui.WeatherScreenView
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -12,32 +11,36 @@ import kotlinx.coroutines.launch
 
 class WeatherScreenPresenter(private val interactor: GetWeatherInteractor) {
 
-    var weatherActivity: WeatherScreenView? = null
-    var city = ""
-    val errorHandler = CoroutineExceptionHandler { _, _ ->
-        weatherActivity?.showError()
+    private var weatherScreenView: WeatherScreenView? = null
+    private var city = ""
+    private val errorHandler = CoroutineExceptionHandler { _, _ ->
+        weatherScreenView?.showError()
     }
 
     fun onGetTempButtonClicked() {
         if (city == "") {
-            weatherActivity?.showErrorCityNotSelected()
+            weatherScreenView?.showErrorCityNotSelected()
             return
         }
         CoroutineScope(Dispatchers.Main).launch(errorHandler) {
             val temp = interactor(city).main.temperature
-            weatherActivity?.showTemperature(temp)
+            weatherScreenView?.showTemperature(temp)
         }
     }
 
-    fun onRadioButtonClicked(nameRadioButton: String) {
+    fun onGoWindScreenClicked() {
+        weatherScreenView?.navigateToWindScreen(city)
+    }
+
+    fun onCitySelected(nameRadioButton: String) {
         city = nameRadioButton
     }
 
     fun attachView(view: WeatherScreenView) {
-        this.weatherActivity = view
+        this.weatherScreenView = view
     }
 
     fun detachView() {
-        weatherActivity = null
+        weatherScreenView = null
     }
 }

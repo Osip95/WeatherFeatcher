@@ -7,4 +7,5 @@ interface WeatherScreenView {
     fun showError()
     fun showTemperature(temperature: String)
     fun showErrorCityNotSelected()
+    fun navigateToWindScreen(city: String)
 }

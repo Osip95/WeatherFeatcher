@@ -9,9 +9,7 @@ import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherApiClient
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemouteSource
 import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
-import com.example.weatherfetcher.feature.weather_screen.domain.WeatherModel
 import com.example.weatherfetcher.feature.weather_screen.presentation.WindScreenPresenter
-import kotlinx.coroutines.CoroutineExceptionHandler
 
 
 class WindActivity : AppCompatActivity(), WindScreenView {
@@ -31,13 +29,13 @@ class WindActivity : AppCompatActivity(), WindScreenView {
 
         tvWindSpeed = findViewById(R.id.tvWindSpeed)
         btnGoWeatherScreen = findViewById(R.id.btnGoWeatherScreen)
-        windPresenter = WindScreenPresenter(interactor)
+        city = intent.getStringExtra(CITY).toString()
+        windPresenter = WindScreenPresenter(interactor,city)
         windPresenter.attachView(this)
-        city = intent.getStringExtra("city").toString()
-        windPresenter.onCreatedActivity(city)
+
 
         btnGoWeatherScreen.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            windPresenter.onGoWeatherScreenClicked()
         }
     }
 
@@ -51,6 +49,10 @@ class WindActivity : AppCompatActivity(), WindScreenView {
 
     override fun showErrorCityNotSelected() {
         Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun navigateToWeatherScreen() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     override fun onDestroy() {

@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), WeatherScreenView {
 
         rgCity.setOnCheckedChangeListener { _, checkedId ->
             findViewById<RadioButton>(checkedId)?.apply {
-                weatherPresenter.onRadioButtonClicked(this.text.toString())
+                weatherPresenter.onCitySelected(this.text.toString())
             }
         }
 
@@ -48,13 +48,15 @@ class MainActivity : AppCompatActivity(), WeatherScreenView {
         }
 
         btnGoWindScreen.setOnClickListener {
-            val intent = Intent(this, WindActivity::class.java)
-            intent.putExtra("city", weatherPresenter.city)
-            startActivity(intent)
+           weatherPresenter.onGoWindScreenClicked()
         }
     }
 
-
+  override fun navigateToWindScreen(city: String){
+       val intent = Intent(this, WindActivity::class.java)
+       intent.putExtra(CITY,city)
+       startActivity(intent)
+   }
     override fun showErrorCityNotSelected() {
         Toast.makeText(this, R.string.no_city_selected, Toast.LENGTH_LONG).show()
     }
