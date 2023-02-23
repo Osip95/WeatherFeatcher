@@ -1,11 +1,7 @@
 package com.example.weatherfetcher.feature.weather_screen.data
 
-import retrofit2.Response
+import com.example.weatherfetcher.feature.weather_screen.data.model.Weather
 
 class WeatherRemouteSource(private val api: WeatherApi) {
-
-    // TODO add query
-    fun getWeather(): Response<String> {
-        return api.getWeather("Moscow")
-    }
+    suspend fun getWeather(city: String): Weather = api.getWeather(city)
 }

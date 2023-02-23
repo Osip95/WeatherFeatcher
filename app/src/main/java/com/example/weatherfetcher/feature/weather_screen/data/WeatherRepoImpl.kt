@@ -1,7 +1,10 @@
 package com.example.weatherfetcher.feature.weather_screen.data
 
+import com.example.weatherfetcher.feature.weather_screen.data.model.Weather
+import com.example.weatherfetcher.feature.weather_screen.domain.WeatherRepo
+
 class WeatherRepoImpl(private val weatherRemouteSource: WeatherRemouteSource): WeatherRepo {
-    override fun getTemperature(): String {
-        return weatherRemouteSource.getWeather().message()
-    }
+
+    override suspend fun getWeather(city: String): Weather = weatherRemouteSource.getWeather(city)
+
 }
