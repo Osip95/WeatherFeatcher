@@ -32,8 +32,8 @@ class WeatherScreenPresenter(private val interactor: GetWeatherInteractor) {
         weatherScreenView?.navigateToWindScreen(city)
     }
 
-    fun onCitySelected(nameRadioButton: String) {
-        city = nameRadioButton
+    fun onCitySelected(city: String) {
+        this.city = city
     }
 
     fun attachView(view: WeatherScreenView) {

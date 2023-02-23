@@ -17,7 +17,7 @@ class WindActivity : AppCompatActivity(), WindScreenView {
     private lateinit var tvWindSpeed: TextView
     private lateinit var btnGoWeatherScreen: Button
     private lateinit var windPresenter: WindScreenPresenter
-    private lateinit var city: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +27,11 @@ class WindActivity : AppCompatActivity(), WindScreenView {
                 WeatherRemouteSource(
                     WeatherApiClient.getApi())))
 
+        val city = intent.getStringExtra(CITY).toString()
         tvWindSpeed = findViewById(R.id.tvWindSpeed)
         btnGoWeatherScreen = findViewById(R.id.btnGoWeatherScreen)
-        city = intent.getStringExtra(CITY).toString()
         windPresenter = WindScreenPresenter(interactor,city)
         windPresenter.attachView(this)
-
 
         btnGoWeatherScreen.setOnClickListener {
             windPresenter.onGoWeatherScreenClicked()
