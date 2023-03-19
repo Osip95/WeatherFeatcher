@@ -1,7 +1,7 @@
 package com.example.weatherfetcher.feature.weather_screen.data
 
 import com.example.weatherfetcher.feature.weather_screen.domain.WeatherRepo
-import com.example.weatherfetcher.feature.weather_screen.ui.model.WeatherModel
+import com.example.weatherfetcher.feature.weather_screen.domain.enity.WeatherModel
 
 class WeatherRepoImpl(private val weatherRemouteSource: WeatherRemouteSource) : WeatherRepo {
 

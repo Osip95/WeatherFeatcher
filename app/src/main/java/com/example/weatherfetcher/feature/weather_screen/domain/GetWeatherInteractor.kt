@@ -3,7 +3,7 @@ package com.example.weatherfetcher.feature.weather_screen
 import com.example.weatherfetcher.base.Either
 import com.example.weatherfetcher.base.attempt
 import com.example.weatherfetcher.feature.weather_screen.domain.WeatherRepo
-import com.example.weatherfetcher.feature.weather_screen.ui.model.WeatherModel
+import com.example.weatherfetcher.feature.weather_screen.domain.enity.WeatherModel
 
 
 class GetWeatherInteractor (private val weatherRepo: WeatherRepo) {
