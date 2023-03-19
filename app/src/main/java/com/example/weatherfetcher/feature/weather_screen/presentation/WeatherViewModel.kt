@@ -1,12 +1,12 @@
 package com.example.weatherfetcher.feature.weather_screen.presentation
 
+
+
 import androidx.lifecycle.viewModelScope
 import com.example.weatherfetcher.base.BaseViewModel
 import com.example.weatherfetcher.base.Event
 import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
-import com.example.weatherfetcher.feature.weather_screen.ui.DataEvent
-import com.example.weatherfetcher.feature.weather_screen.ui.UiEvent
-import com.example.weatherfetcher.feature.weather_screen.ui.ViewState
+import com.example.weatherfetcher.feature.weather_screen.ui.*
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<ViewState>() {
@@ -14,17 +14,29 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
         isLoading = false,
         city = "",
         temperature = "temperature",
-        speedWind = ""
+        speedWind = "",
+        readyToGo = false,
+        errorVisibility = false,
+        errorText = ""
     )
 
 
     override fun reduce(event: Event, previousState: ViewState): ViewState? {
         when (event) {
-            is UiEvent.OnRbMoscow -> return previousState.copy(city = "Moscow")
-            is UiEvent.OnRbSaintPetersburg -> return previousState.copy(city = "Saint Petersburg")
-            is UiEvent.OnRbOmsk -> return previousState.copy(city = "Omsk")
-            is UiEvent.OnButtonGetTemperature -> {
 
+            is UiEvent.OnGoWindScreen -> {
+                if (previousState.city == "") return previousState.copy(errorVisibility = true,
+                    errorText = "Select city")
+                if(previousState.speedWind == "") return previousState.copy(errorVisibility = true,
+                errorText = "Get weather data")
+
+                return previousState.copy(readyToGo = true)
+            }
+            is OnRbClicked -> return previousState.copy(city = event.city,
+                errorVisibility = false)
+            is UiEvent.OnButtonGetWeatherInform -> {
+                if (previousState.city == "") return previousState.copy(errorVisibility = true,
+                    errorText = "Select city" )
                 viewModelScope.launch {
                     interactor(previousState.city).fold(
                         onError = {
@@ -36,13 +48,14 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
                         }
                     )
                 }
-                return previousState.copy(isLoading = true)
+                return previousState.copy(isLoading = true, errorVisibility = false)
             }
 
             is DataEvent.OnWeatherFetchSucced -> {
                 return previousState.copy(isLoading = false,
                     temperature = event.temperature,
-                    speedWind = event.speedWind)
+                    speedWind = event.speedWind
+                )
             }
             else -> return null
         }

@@ -3,11 +3,13 @@ package com.example.weatherfetcher.feature.weather_screen.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.example.weatherfetcher.R
 import com.example.weatherfetcher.feature.weather_screen.presentation.WeatherViewModel
-import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WeatherFragment : Fragment(R.layout.weather_fragment) {
     private lateinit var rgCity: RadioGroup
@@ -15,7 +17,10 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
     private lateinit var btnGetWeatherInform: Button
     private lateinit var btnGoWindScreen: Button
     private lateinit var progressBar: ProgressBar
-    private val weatherViewModel: WeatherViewModel by activityViewModel()
+    private lateinit var tvError: TextView
+    private val weatherViewModel: WeatherViewModel by viewModel<WeatherViewModel>()
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -24,58 +29,51 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
         btnGetWeatherInform = view.findViewById(R.id.bt_get_weather_inform)
         btnGoWindScreen = view.findViewById(R.id.bt_go_screen_wind)
         progressBar = view.findViewById(R.id.progrses_bar)
+        tvError = view.findViewById(R.id.tv_error)
 
         weatherViewModel.viewState.observe(viewLifecycleOwner, ::render)
 
         btnGetWeatherInform.setOnClickListener {
-            if (weatherViewModel.viewState.value?.city == "") {
-                showErrorCityNotSelected()
-                return@setOnClickListener
-            }
-            weatherViewModel.processUIEvent(UiEvent.OnButtonGetTemperature)
+            weatherViewModel.processUIEvent(UiEvent.OnButtonGetWeatherInform)
         }
         rgCity.setOnCheckedChangeListener { _, checkedId ->
             view.findViewById<RadioButton>(checkedId)?.apply {
-                when (this.id) {
-                    R.id.rbMoscow -> weatherViewModel.processUIEvent(UiEvent.OnRbMoscow)
-                    R.id.rbSaintPetersburg -> weatherViewModel.processUIEvent(UiEvent.OnRbSaintPetersburg)
-                    R.id.rbOmsk -> weatherViewModel.processUIEvent(UiEvent.OnRbOmsk)
-                }
+                val buttonText = text.toString()
+                weatherViewModel.processUIEvent(OnRbClicked(buttonText))
             }
         }
 
         btnGoWindScreen.setOnClickListener {
-            if (weatherViewModel.viewState.value?.city == "") {
-                showErrorCityNotSelected()
-                return@setOnClickListener
-            }
-            if (weatherViewModel.viewState.value?.speedWind == "") {
-                showErrorDataNotReceived()
-                return@setOnClickListener
-            }
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.conteiner, WindFragment())
-                ?.commit()
+            weatherViewModel.processUIEvent(UiEvent.OnGoWindScreen)
+
+
         }
     }
 
     private fun render(viewState: ViewState) {
         when (viewState.city) {
-            "Moscow" -> rgCity.check(R.id.rbMoscow)
-            "Saint Petersburg" -> rgCity.check(R.id.rbSaintPetersburg)
-            "Omsk" -> rgCity.check(R.id.rbOmsk)
+                getString(R.string.moscow) -> rgCity.check(R.id.rbMoscow)
+                getString(R.string.saint_petersburg) -> rgCity.check(R.id.rbSaintPetersburg)
+                getString(R.string.omsk) -> rgCity.check(R.id.rbOmsk)
+                else -> Unit
         }
+        if(viewState.readyToGo) {
+            setFragmentResult(
+                "get_speed_wind",
+                bundleOf("speedWind" to weatherViewModel.viewState.value?.speedWind)
+            )
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container_view, WindFragment())
+                .commit()
+        }
+        tvError.isVisible = viewState.errorVisibility
+        tvError.text = viewState.errorText
         progressBar.isVisible = viewState.isLoading
         tvTemperature.text = viewState.temperature
     }
 
-   private fun showErrorCityNotSelected() {
-        Toast.makeText(activity, R.string.no_city_selected, Toast.LENGTH_LONG).show()
-    }
 
-   private fun showErrorDataNotReceived() {
-        Toast.makeText(activity, R.string.no_weather_data, Toast.LENGTH_LONG).show()
-    }
 
 
 }
