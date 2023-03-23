@@ -29,7 +29,6 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
                     errorText = "Select city")
                 if(previousState.speedWind == "") return previousState.copy(errorVisibility = true,
                 errorText = "Get weather data")
-
                 return previousState.copy(readyToGo = true)
             }
             is OnRbClicked -> return previousState.copy(city = event.city,

@@ -58,13 +58,10 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
                 else -> Unit
         }
         if(viewState.readyToGo) {
-            setFragmentResult(
-                "get_speed_wind",
-                bundleOf("speedWind" to weatherViewModel.viewState.value?.speedWind)
-            )
-
+            val bundle = Bundle().apply { putString(SPEED_WIND_KEY, weatherViewModel.viewState.value?.speedWind) }
+            val windFragment = WindFragment().apply { arguments = bundle }
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, WindFragment())
+                .replace(R.id.fragment_container_view, windFragment).addToBackStack(null)
                 .commit()
         }
         tvError.isVisible = viewState.errorVisibility
