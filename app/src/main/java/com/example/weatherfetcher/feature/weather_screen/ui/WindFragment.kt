@@ -22,9 +22,7 @@ class WindFragment : Fragment(R.layout.wind_fragment) {
 
 
         btnGoWeather.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragment_container_view, WeatherFragment())
-                ?.commit()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

@@ -3,10 +3,8 @@ package com.example.weatherfetcher.feature.weather_screen.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import com.example.weatherfetcher.R
 import com.example.weatherfetcher.feature.weather_screen.presentation.WeatherViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,8 +56,13 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
             getString(R.string.omsk) -> rgCity.check(R.id.rbOmsk)
             else -> Unit
         }
-        tvError.isVisible = viewState.errorVisibility
-        tvError.text = viewState.errorText
+        when(viewState.errorCode){
+            ErrorСodes.NO_ERROR -> tvError.text = ""
+            ErrorСodes.DATA_ERROR -> tvError.text = getString(R.string.no_weather_data)
+            ErrorСodes.CITY_ERROR -> tvError.text = getString(R.string.no_city_selected)
+            ErrorСodes.ERROR_NETWORK -> tvError.text = getString(R.string.error_network)
+        }
+
         progressBar.isVisible = viewState.isLoading
         tvTemperature.text = viewState.temperature
     }
