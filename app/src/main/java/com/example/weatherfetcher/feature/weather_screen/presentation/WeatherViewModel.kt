@@ -2,20 +2,24 @@ package com.example.weatherfetcher.feature.weather_screen.presentation
 
 
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherfetcher.base.BaseViewModel
 import com.example.weatherfetcher.base.Event
+import com.example.weatherfetcher.base.SingleLiveEvent
 import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
 import com.example.weatherfetcher.feature.weather_screen.ui.*
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<ViewState>() {
+    private val _goWindEvent = SingleLiveEvent<String>()
+    val goWindEvent: MutableLiveData<String> = _goWindEvent
     override fun initialViewState(): ViewState = ViewState(
         isLoading = false,
         city = "",
         temperature = "temperature",
         speedWind = "",
-        readyToGo = false,
         errorVisibility = false,
         errorText = ""
     )
@@ -29,7 +33,8 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
                     errorText = "Select city")
                 if(previousState.speedWind == "") return previousState.copy(errorVisibility = true,
                 errorText = "Get weather data")
-                return previousState.copy(readyToGo = true)
+                goWindEvent.value = previousState.speedWind
+                return previousState.copy()
             }
             is OnRbClicked -> return previousState.copy(city = event.city,
                 errorVisibility = false)

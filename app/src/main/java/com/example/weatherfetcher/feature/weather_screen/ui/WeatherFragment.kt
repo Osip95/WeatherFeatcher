@@ -32,6 +32,7 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
         tvError = view.findViewById(R.id.tv_error)
 
         weatherViewModel.viewState.observe(viewLifecycleOwner, ::render)
+        weatherViewModel.goWindEvent.observe(viewLifecycleOwner, ::goToWindScreen)
 
         btnGetWeatherInform.setOnClickListener {
             weatherViewModel.processUIEvent(UiEvent.OnButtonGetWeatherInform)
@@ -52,17 +53,10 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
 
     private fun render(viewState: ViewState) {
         when (viewState.city) {
-                getString(R.string.moscow) -> rgCity.check(R.id.rbMoscow)
-                getString(R.string.saint_petersburg) -> rgCity.check(R.id.rbSaintPetersburg)
-                getString(R.string.omsk) -> rgCity.check(R.id.rbOmsk)
-                else -> Unit
-        }
-        if(viewState.readyToGo) {
-            val bundle = Bundle().apply { putString(SPEED_WIND_KEY, weatherViewModel.viewState.value?.speedWind) }
-            val windFragment = WindFragment().apply { arguments = bundle }
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container_view, windFragment).addToBackStack(null)
-                .commit()
+            getString(R.string.moscow) -> rgCity.check(R.id.rbMoscow)
+            getString(R.string.saint_petersburg) -> rgCity.check(R.id.rbSaintPetersburg)
+            getString(R.string.omsk) -> rgCity.check(R.id.rbOmsk)
+            else -> Unit
         }
         tvError.isVisible = viewState.errorVisibility
         tvError.text = viewState.errorText
@@ -70,7 +64,13 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
         tvTemperature.text = viewState.temperature
     }
 
-
+    private fun goToWindScreen(speedWind: String) {
+        val bundle = Bundle().apply { putString(SPEED_WIND_KEY, speedWind) }
+        val windFragment = WindFragment().apply { arguments = bundle }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_view, windFragment).addToBackStack(null)
+            .commit()
+    }
 
 
 }

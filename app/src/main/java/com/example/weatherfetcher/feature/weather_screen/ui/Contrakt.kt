@@ -9,7 +9,6 @@ data class ViewState(
     val city: String,
     val temperature: String,
     val speedWind:String,
-    val readyToGo: Boolean,
     val errorVisibility: Boolean,
     var errorText: String
 )
