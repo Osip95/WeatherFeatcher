@@ -56,13 +56,12 @@ class WeatherFragment : Fragment(R.layout.weather_fragment) {
             getString(R.string.omsk) -> rgCity.check(R.id.rbOmsk)
             else -> Unit
         }
-        when(viewState.errorCode){
-            ErrorСodes.NO_ERROR -> tvError.text = ""
-            ErrorСodes.DATA_ERROR -> tvError.text = getString(R.string.no_weather_data)
-            ErrorСodes.CITY_ERROR -> tvError.text = getString(R.string.no_city_selected)
-            ErrorСodes.ERROR_NETWORK -> tvError.text = getString(R.string.error_network)
+        tvError.text = when (viewState.errorCode) {
+            ErrorСodes.NO_ERROR -> ""
+            ErrorСodes.WIND_SPEED_EMPTY -> getString(R.string.no_weather_data)
+            ErrorСodes.EMPTY_CITY -> getString(R.string.no_city_selected)
+            ErrorСodes.WEATHER_FETCH_ERROR -> getString(R.string.error_network)
         }
-
         progressBar.isVisible = viewState.isLoading
         tvTemperature.text = viewState.temperature
     }

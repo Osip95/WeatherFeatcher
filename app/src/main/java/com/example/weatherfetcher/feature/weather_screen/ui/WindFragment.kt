@@ -16,7 +16,7 @@ class WindFragment : Fragment(R.layout.wind_fragment) {
         super.onViewCreated(view, savedInstanceState)
         btnGoWeather = view.findViewById(R.id.go_weather)
         tvSpeedWind = view.findViewById(R.id.tvSpeedWind)
-        val windSpeed = arguments?.getString("SPEED_WIND_KEY") ?: "Not found"
+        val windSpeed = arguments?.getString(SPEED_WIND_KEY) ?: NOT_FOUND
         windViewModel = WindViewModel(windSpeed)
         windViewModel.viewStateWind.observe(viewLifecycleOwner, ::setTextTv)
 

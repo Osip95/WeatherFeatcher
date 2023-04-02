@@ -3,6 +3,7 @@ package com.example.weatherfetcher.feature.weather_screen.presentation
 
 
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherfetcher.base.BaseViewModel
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<ViewState>() {
     private val _goWindEvent = SingleLiveEvent<String>()
-    val goWindEvent: MutableLiveData<String> = _goWindEvent
+    val goWindEvent: LiveData<String> = _goWindEvent
     override fun initialViewState(): ViewState = ViewState(
         isLoading = false,
         city = "",
@@ -28,14 +29,14 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
         when (event) {
 
             is UiEvent.OnGoWindScreen -> {
-                if (previousState.city == "") return previousState.copy(errorCode = ErrorСodes.CITY_ERROR)
-                if(previousState.speedWind == "") return previousState.copy(errorCode = ErrorСodes.DATA_ERROR)
-                goWindEvent.value = previousState.speedWind
+                if (previousState.city == "") return previousState.copy(errorCode = ErrorСodes.EMPTY_CITY)
+                if(previousState.speedWind == "") return previousState.copy(errorCode = ErrorСodes.WIND_SPEED_EMPTY)
+                _goWindEvent.value = previousState.speedWind
                 return previousState.copy()
             }
             is OnRbClicked -> return previousState.copy(city = event.city)
             is UiEvent.OnButtonGetWeatherInform -> {
-                if (previousState.city == "") return previousState.copy(errorCode = ErrorСodes.CITY_ERROR)
+                if (previousState.city == "") return previousState.copy(errorCode = ErrorСodes.EMPTY_CITY)
                 viewModelScope.launch {
                     interactor(previousState.city).fold(
                         onError = {
@@ -50,7 +51,7 @@ class WeatherViewModel(val interactor: GetWeatherInteractor) : BaseViewModel<Vie
                 return previousState.copy(isLoading = true, errorCode = ErrorСodes.NO_ERROR)
             }
             is DataEvent.OnWeatherFetchFailed -> {
-                return previousState.copy(errorCode = ErrorСodes.ERROR_NETWORK, isLoading = false)
+                return previousState.copy(errorCode = ErrorСodes.WEATHER_FETCH_ERROR, isLoading = false)
             }
 
             is DataEvent.OnWeatherFetchSucced -> {
