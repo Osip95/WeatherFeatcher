@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">WeatherFetcher</string>
+    <string name="title_activity_wind">WindActivity</string>
+    <string name="moscow">Moscow</string>
+    <string name="saint_petersburg">Saint Petersburg</string>
+    <string name="omsk">Omsk</string>
+    <string name="error_network">An error occurred while retrieving data</string>
+    <string name="no_city_selected">Select city</string>
+    <string name="no_weather_data">Get weather data</string>
+    <string name="tv_title_wind_speed">speedWind</string>
+    <string name="title_btn_go_weather_screen">GoWeatherScreen</string>
+    <string name="title_bt_go_screen_wind">GoScreenWind</string>
+    <string name="title_btn_get_weather_information">GetWeatherInformation</string>
+    <string name="tv_title_temperature">temperature</string>
 </resources>

@@ -29,9 +29,38 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    def lifecycle_version = "2.5.1"
+    def retrofit_version = "2.9.0"
+    def coroutines_version = "1.6.4"
+    def gson_version = "2.10.1"
+    def gson_converter_version = "2.9.0"
+    def logging_interceptor_version = "4.10.0"
+    def koin_android_version = "3.3.3"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    //Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+    // Gson
+    implementation "com.google.code.gson:gson:$gson_version"
+    //Gson Converter
+    implementation  "com.squareup.retrofit2:converter-gson:$gson_converter_version"
+    //Logging-interceptor
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
+    //Koin
+    implementation "io.insert-koin:koin-android:$koin_android_version"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
